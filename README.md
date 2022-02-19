@@ -1,0 +1,1 @@
+Exercise to prepare Liferay Backend Certification
