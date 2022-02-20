@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.training.gradebook.model.Assignment;
@@ -43,14 +44,32 @@ import java.util.Map;
         service = AopService.class
 )
 public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
-    @Reference
-    AssignmentValidator _assignmentValidator;
 
     /*
      * NOTE FOR DEVELOPERS:
      *
      * Never reference this class directly. Use <code>com.liferay.training.gradebook.service.AssignmentLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.liferay.training.gradebook.service.AssignmentLocalServiceUtil</code>.
      */
+
+    @Reference
+    AssignmentValidator _assignmentValidator;
+
+    private void updateAsset(
+            Assignment assignment, ServiceContext serviceContext)
+            throws PortalException {
+
+        assetEntryLocalService.updateEntry(
+                serviceContext.getUserId(), serviceContext.getScopeGroupId(),
+                assignment.getCreateDate(), assignment.getModifiedDate(),
+                Assignment.class.getName(), assignment.getAssignmentId(),
+                assignment.getUuid(), 0, serviceContext.getAssetCategoryIds(),
+                serviceContext.getAssetTagNames(), true, true,
+                assignment.getCreateDate(), null, null, null,
+                ContentTypes.TEXT_HTML, assignment.getTitle(serviceContext.getLocale()),
+                assignment.getDescription(serviceContext.getLocale()), null, null, null, 0, 0,
+                serviceContext.getAssetPriority());
+    }
+
     public Assignment addAssignment(
             long groupId, Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
             Date dueDate, ServiceContext serviceContext)
@@ -89,6 +108,8 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
         assignment.setUserId(userId);
         assignment.setUserName(user.getScreenName());
 
+        updateAsset(assignment, serviceContext);
+
         // Persist assignment to database.
         return super.addAssignment(assignment);
     }
@@ -115,7 +136,19 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
 
         assignment = super.updateAssignment(assignment);
 
+        updateAsset(assignment, serviceContext);
+
         return assignment;
+    }
+
+    public Assignment deleteAssignment(Assignment assignment)
+            throws PortalException {
+
+        assetEntryLocalService.deleteEntry(Assignment.class.getName(), assignment.getAssignmentId());
+
+        // Delete the Assignment
+
+        return super.deleteAssignment(assignment);
     }
 
     public List<Assignment> getAssignmentsByGroupId(long groupId) {
