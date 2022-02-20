@@ -19,7 +19,9 @@ import javax.portlet.Portlet;
                 "javax.portlet.init-param.add-process-action-success-action=false",
                 "javax.portlet.name=" + GradebookPortletKeys.Gradebook,
                 "javax.portlet.resource-bundle=content.Language",
-                "javax.portlet.security-role-ref=power-user,user"
+                "javax.portlet.security-role-ref=power-user,user",
+                "com.liferay.portlet.css-class-wrapper=gradebook-portlet",
+                "com.liferay.portlet.header-portlet-css=/css/main.css"
         },
         service = Portlet.class
 )
