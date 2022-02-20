@@ -21,6 +21,7 @@ import javax.portlet.Portlet;
                 "javax.portlet.security-role-ref=power-user,user",
                 "com.liferay.portlet.display-category=category.training",
                 "com.liferay.portlet.instanceable=false",
+                "javax.portlet.init-param.add-process-action-success-action=false"
         },
         service = Portlet.class
 )

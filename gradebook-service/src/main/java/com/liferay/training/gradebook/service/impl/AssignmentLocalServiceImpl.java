@@ -26,7 +26,9 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.training.gradebook.model.Assignment;
 import com.liferay.training.gradebook.service.base.AssignmentLocalServiceBaseImpl;
+import com.liferay.training.gradebook.validator.AssignmentValidator;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +43,9 @@ import java.util.Map;
         service = AopService.class
 )
 public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
+    @Reference
+    AssignmentValidator _assignmentValidator;
+
     /*
      * NOTE FOR DEVELOPERS:
      *
@@ -50,6 +55,10 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
             long groupId, Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
             Date dueDate, ServiceContext serviceContext)
             throws PortalException {
+
+        // Validate assignment parameters.
+
+        _assignmentValidator.validate(titleMap, descriptionMap, dueDate);
 
         // Get group and user.
 
@@ -81,7 +90,6 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
         assignment.setUserName(user.getScreenName());
 
         // Persist assignment to database.
-
         return super.addAssignment(assignment);
     }
 
@@ -89,6 +97,10 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
             long assignmentId, Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
             Date dueDate, ServiceContext serviceContext)
             throws PortalException {
+
+        // Validate assignment parameters.
+
+        _assignmentValidator.validate(titleMap, descriptionMap, dueDate);
 
         // Get the Assignment by id.
 
