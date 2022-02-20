@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -91,21 +90,7 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
         assignment.setUserName(user.getScreenName());
 
         // Persist assignment to database.
-
-        assignment = super.addAssignment(assignment);
-
-        // Add permission resources.
-
-        boolean portletActions = false;
-        boolean addGroupPermissions = true;
-        boolean addGuestPermissions = true;
-
-        resourceLocalService.addResources(
-                group.getCompanyId(), groupId, userId, Assignment.class.getName(),
-                assignment.getAssignmentId(), portletActions, addGroupPermissions,
-                addGuestPermissions);
-
-        return assignment;
+        return super.addAssignment(assignment);
     }
 
     public Assignment updateAssignment(
@@ -131,19 +116,6 @@ public class AssignmentLocalServiceImpl extends AssignmentLocalServiceBaseImpl {
         assignment = super.updateAssignment(assignment);
 
         return assignment;
-    }
-
-    public Assignment deleteAssignment(Assignment assignment)
-            throws PortalException {
-
-        // Delete permission resources.
-
-        resourceLocalService.deleteResource(
-                assignment, ResourceConstants.SCOPE_INDIVIDUAL);
-
-        // Delete the Assignment
-
-        return super.deleteAssignment(assignment);
     }
 
     public List<Assignment> getAssignmentsByGroupId(long groupId) {

@@ -83,12 +83,10 @@ public class AssignmentLocalServiceWrapper
 	 *
 	 * @param assignment the assignment
 	 * @return the assignment that was removed
-	 * @throws PortalException
 	 */
 	@Override
 	public com.liferay.training.gradebook.model.Assignment deleteAssignment(
-			com.liferay.training.gradebook.model.Assignment assignment)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		com.liferay.training.gradebook.model.Assignment assignment) {
 
 		return _assignmentLocalService.deleteAssignment(assignment);
 	}

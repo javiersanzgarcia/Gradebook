@@ -104,11 +104,9 @@ public interface AssignmentLocalService
 	 *
 	 * @param assignment the assignment
 	 * @return the assignment that was removed
-	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public Assignment deleteAssignment(Assignment assignment)
-		throws PortalException;
+	public Assignment deleteAssignment(Assignment assignment);
 
 	/**
 	 * Deletes the assignment with the primary key from the database. Also notifies the appropriate model listeners.
